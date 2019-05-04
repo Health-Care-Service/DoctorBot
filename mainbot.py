@@ -11,8 +11,11 @@ APP_PASSWORD = ''
 PORT = 9000
 
 class BotRequestHandler(http.server.BaseHTTPRequestHandler):
+    
+    # these are diseases and their symptoms 
     f_symptoms = ['fever', 'cough', 'sore throat', 'runny', 'nose', 'muscle', 'headaches', 'fatigue']
     d_symptoms = ['loose', 'watery', 'stools', 'cramps', 'fever', 'blood', 'bloating', 'nausea', 'bowel']
+
     @staticmethod
     def __create_reply_activity(request_activity, text):
         return Activity(
@@ -69,10 +72,13 @@ class BotRequestHandler(http.server.BaseHTTPRequestHandler):
         if not self.__handle_authentication(activity):
             return
 
+        # Handle when someone join the server
         if activity.type == ActivityTypes.conversation_update.value:
             self.__handle_conversation_update_activity(activity)
+        # handle when someone write a message on server 
         elif activity.type == ActivityTypes.message.value:
             self.__handle_message_activity(activity)
+        # handle unknown error
         else:
             self.__unhandled_activity()
 
